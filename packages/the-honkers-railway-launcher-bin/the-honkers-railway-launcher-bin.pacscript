@@ -1,12 +1,18 @@
-name="the-honkers-railway-launcher-bin"
+pkgname="the-honkers-railway-launcher-bin"
 gives="the-honkers-railway-launcher"
 pkgver="1.5.4"
 pkgdesc="The Honkers Railway launcher for Linux with automatic patching and telemetry disabling"
 repology=("project: the-honkers-railway-launcher")
-url="https://github.com/an-anime-team/the-honkers-railway-launcher/releases/download/${pkgver}/honkers-railway-launcher"
-hash="c7ce99c94a629089caa1a7d22ac68dbddfb7a7e81c1e9f447b1b800f7ecf84ee"
+source=(
+  "https://github.com/an-anime-team/the-honkers-railway-launcher/releases/download/${pkgver}/honkers-railway-launcher"
+  "icon.png::https://raw.githubusercontent.com/an-anime-team/the-honkers-railway-launcher/main/assets/images/icon.png"
+)
+sha256sums=(
+  "c7ce99c94a629089caa1a7d22ac68dbddfb7a7e81c1e9f447b1b800f7ecf84ee"
+  "SKIP"
+)
 depends=("xdelta3")
-maintainer="vbrabandt2005 <https://github.com/vbrabandt2005>"
+maintainer=("vbrabandt2005 <https://github.com/vbrabandt2005>")
 incompatible=("ubuntu:bionic" "ubuntu:focal" "ubuntu:jammy" "ubuntu:kinetic" "debian:stretch" "debian:buster" "debian:bullseye")
 breaks=("${gives}" "${gives}-deb" "${gives}-app" "${gives}-git")
 
@@ -16,6 +22,7 @@ optdepends=(
 )
 
 package() {
+  cd "${_archive}"
   sudo install -Dm755 "honkers-railway-launcher" "${pkgdir}/usr/bin/${gives}"
   sudo mkdir -p "${pkgdir}/usr/share/applications"
   echo '[Desktop Entry]
@@ -26,8 +33,7 @@ Type=Application
 Categories=Game;
 Terminal=false
 X-AppImage-Version=2.4.2' | sudo tee "${pkgdir}/usr/share/applications/honkers-railway-launcher.desktop" > /dev/null
-  wget -q https://raw.githubusercontent.com/an-anime-team/the-honkers-railway-launcher/main/assets/images/icon.png
-  sudo install -Dm644 "icon.png" "${pkgdir}/usr/share/icons/hicolor/64x64/apps/the-honkers-railway-launcher.png"
+  sudo install -Dm644 "${srcdir}/icon.png" "${pkgdir}/usr/share/icons/hicolor/64x64/apps/the-honkers-railway-launcher.png"
 
 }
 
